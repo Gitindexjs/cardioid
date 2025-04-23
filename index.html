@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.min.js"></script>
+    </head>
+    <body>
+        <script>
+            let divisions = 100;
+            let t = 0;
+            let coefficients = [100, 50];
+            function setup() {
+                createCanvas(600, 600);
+            }
+            function series(t) {
+                let sum = [300, 300];
+                for(let i = 0; i < coefficients.length; i++) {
+                    sum[0] += coefficients[i] * Math.cos(t * (i+1));
+                    sum[1] += coefficients[i] * Math.sin(t * (i+1));
+                }
+                return sum;
+            }
+            function drawSeries() {
+                let cumulative = [300, 300]
+                ellipse(...cumulative, coefficients[0] * 2);
+                for(let i = 1; i < coefficients.length-1; i++) {
+                    cumulative[0] += coefficients[i] * Math.cos(t * i);
+                    cumulative[1] += coefficients[i] * Math.sin(t * i);
+                    ellipse(...cumulative, coefficients[i+1] * 2)
+                }
+            }
+            function draw() {
+                background(0);
+                noFill()
+                stroke(173, 216, 230);
+                strokeWeight(2);
+                beginShape();
+                for(let i = 0; i < divisions; i++) {
+                    vertex(...series(2 * Math.PI / divisions * i))
+                }
+                endShape(CLOSE);
+                ellipse(300, 300, 200);
+                ellipse(100*Math.cos(t) + 300, 100 * Math.sin(t) + 300, 100)
+                stroke(255, 0, 0);
+                strokeWeight(4);
+                point(...series(t))
+                t+=0.01;
+            }
+        </script>
+    </body>
+</html>
